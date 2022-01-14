@@ -1,0 +1,37 @@
+{
+  "name": "chrome-extension-tiktok-downloader",
+  "description": "Download tiktok",
+  "version": "1.0",
+  "manifest_version": 3,
+  "permissions": [
+    "webRequest",
+    "tabs",
+    "storage"
+  ],
+  "host_permissions": [
+    "https://*/*"
+  ],
+  "content_scripts": [
+    {
+      "matches": [
+        "https://*.tiktok.com/*"
+      ],
+      "js": [
+        "content-script.js"
+      ]
+    }
+  ],
+  "background": {
+    "service_worker": "background.js"
+  },
+  "web_accessible_resources": [
+    {
+      "resources": [
+        "web_accessible_resources.js"
+      ],
+      "matches": [
+        "https://*.tiktok.com/*"
+      ]
+    }
+  ]
+}
