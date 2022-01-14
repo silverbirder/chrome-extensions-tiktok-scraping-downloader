@@ -1,7 +1,5 @@
-// from background.js
 chrome.runtime.onMessage.addListener(
     async (request, sender, sendResponse) => {
-        console.log('from background.js');
         const json = await (await fetch(request.url)).json();
         process(json.itemList);
         sendResponse();
@@ -9,10 +7,8 @@ chrome.runtime.onMessage.addListener(
     }
 );
 
-// from web_accessible_resources.js
 window.addEventListener('message', (event) => {
     if (event.data.type && event.data.type == "FROM_PAGE") {
-        console.log('from web_accessible_resources.js');
         const details = event.data.details;
         process(Object.values(details));
     }
