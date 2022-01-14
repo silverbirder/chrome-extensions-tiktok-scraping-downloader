@@ -1,5 +1,6 @@
 require('dotenv').config();
 
+const fs = require('fs');
 const express = require('express');
 const cookieParser = require('cookie-parser');
 const cors = require('cors');
@@ -29,7 +30,6 @@ express()
   .use(express.urlencoded({ extended: false }))
   .use(cookieParser())
   .post('/', upload.array('files', 3), async (req, res, next) => {
-    console.log('post!');
     const data = JSON.parse(req.body.data);
     const files = req.files;
     const uploadResponses = await Promise.all(files.map((f) => {
@@ -56,6 +56,9 @@ express()
       process.env.GOOGLE_CLOUD_FIRESTORE_COLLECTION,
       params,
     );
+    files.map((f) => {
+      fs.unlinkSync(f.path);
+    });
     res.sendStatus(200);
   })
   .listen(port, () => {
