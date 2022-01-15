@@ -55,6 +55,9 @@ export class WcFirestore extends LitElement {
     this.requestUpdate();
   }
   render() {
+    // In the html in the tiktok oembed return, the height is specified as 739px.
+    // @see https://www.tiktok.com/oembed?url=xxxx ...
+
     // return html`
     //   <iframe srcdoc='${this.oembeds.map((d) => d.html).join('')}' loading="lazy" width="100%" height="${739 * this.oembeds.length}px">
     //   </iframe><button @click=${this.readMore}>Read more...</button>`;
