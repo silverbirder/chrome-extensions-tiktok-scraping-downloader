@@ -21,6 +21,7 @@ express()
       process.env.GOOGLE_CLOUD_FIRESTORE_COLLECTION,
       req.body.data,
     );
+    console.log(`saved id:${req.body.data.id}`);
     res.sendStatus(200);
   })
   .listen(port, () => {
