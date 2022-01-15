@@ -1,22 +1,10 @@
 require('dotenv').config();
 
-const fs = require('fs');
 const express = require('express');
-const cookieParser = require('cookie-parser');
 const cors = require('cors');
-const multer = require('multer');
-const { Storage } = require('@google-cloud/storage');
 const { Firestore } = require('@google-cloud/firestore');
 
-const upload = multer({ dest: 'uploads/' })
 const port = process.env.PORT || 3000;
-
-const uploadFile = async (bucketName, filePath, destFileName) => {
-  const storage = new Storage();
-  return storage.bucket(bucketName).upload(filePath, {
-    destination: destFileName,
-  });
-}
 
 const uploadDoc = async (collectionName, docObj) => {
   const firestore = new Firestore();
@@ -28,37 +16,11 @@ express()
   .use(cors())
   .use(express.json())
   .use(express.urlencoded({ extended: false }))
-  .use(cookieParser())
-  .post('/', upload.array('files', 3), async (req, res, next) => {
-    const data = JSON.parse(req.body.data);
-    const files = req.files;
-    const uploadResponses = await Promise.all(files.map((f) => {
-      return uploadFile(
-        process.env.GOOGLE_CLOUD_STORAGE_BUCKET,
-        f.path,
-        f.originalname
-      )
-    }));
-    const uploadFiles = uploadResponses.map((u) => {
-      const [file, meta] = u;
-      const publicUrl = `https://storage.googleapis.com/${process.env.GOOGLE_CLOUD_STORAGE_BUCKET}/${file.id.replace(/\/\d+$/, '')}`;
-      const splitFileName = file.name.split('-');
-      const typeName = splitFileName.slice(0, splitFileName.length - 1).join('-');
-      const result = {};
-      result[typeName] = publicUrl;
-      return result;
-    })
-    const params = data;
-    uploadFiles.map((u) => {
-      Object.assign(params, u);
-    })
+  .post('/', async (req, res, next) => {
     await uploadDoc(
       process.env.GOOGLE_CLOUD_FIRESTORE_COLLECTION,
-      params,
+      req.body.data,
     );
-    files.map((f) => {
-      fs.unlinkSync(f.path);
-    });
     res.sendStatus(200);
   })
   .listen(port, () => {

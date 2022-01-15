@@ -26,15 +26,12 @@ const _sleep = (ms) => new Promise((resolve) => setTimeout(resolve, ms));
 
 const process = (items) => {
     Promise.all(items.map(async (i) => {
-        const downloadAddrBlob = await (await fetch(i.video.downloadAddr)).blob();
-        const coverBlob = await (await fetch(i.video.cover)).blob();
-        const form = new FormData();
-        form.append('files', downloadAddrBlob, `video-downloadAddr-${i.video.id}.mp4`);
-        form.append('files', coverBlob, `video-cover-${i.video.id}.png`);
-        form.append('data', JSON.stringify(i));
         return fetch("http://localhost:3000", {
             method: "POST",
-            body: form
+            headers: {
+                'Content-Type': 'application/json'
+            },
+            body: JSON.stringify({ 'data': i })
         })
     }))
 }

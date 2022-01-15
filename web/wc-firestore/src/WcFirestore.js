@@ -1,6 +1,6 @@
 import { LitElement, html } from 'lit';
 import { initializeApp } from "firebase/app"
-import { getFirestore, collection, getDocs } from "firebase/firestore"
+import { getFirestore, collection, getDocs, query, orderBy, limit } from "firebase/firestore"
 
 export class WcFirestore extends LitElement {
   static get properties() {
@@ -10,17 +10,19 @@ export class WcFirestore extends LitElement {
   }
   constructor() {
     super();
-    const firebaseApp = initializeApp({
-      apiKey: process.env.FIREBASE_API_KEY,
-      projectId: process.env.FIREBASE_PROJECT_ID,
-    });
     this.data = [];
   }
 
   async connectedCallback() {
     super.connectedCallback();
-    const db = getFirestore();
-    const querySnapshot = await getDocs(collection(db, "collection"));
+    const firebaseApp = initializeApp({
+      apiKey: process.env.FIREBASE_API_KEY,
+      projectId: process.env.FIREBASE_PROJECT_ID,
+    });
+    const db = getFirestore(firebaseApp);
+    const col = collection(db, 'collection');
+    const q = query(col, orderBy('createTime', 'desc'), limit(5));
+    const querySnapshot = await getDocs(q);
     const docs = querySnapshot.docs.filter((d) => d.data().video);
     const data = await Promise.all(docs.map(async (d) => {
       const data = d.data();
