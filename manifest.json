@@ -33,5 +33,6 @@
         "https://*.tiktok.com/*"
       ]
     }
-  ]
+  ],
+  "options_page": "options.html"
 }

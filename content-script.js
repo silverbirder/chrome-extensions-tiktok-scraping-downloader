@@ -35,7 +35,9 @@ const _sleep = (ms) => new Promise((resolve) => setTimeout(resolve, ms));
 
 const process = (items) => {
     Promise.all(items.map(async (i) => {
-        return fetch("http://localhost:3000", {
+        const urlStorage = await chrome.storage.sync.get('url');
+        const url = urlStorage ? urlStorage.url : "http://localhost:3000";
+        return fetch(url, {
             method: "POST",
             headers: {
                 'Content-Type': 'application/json'
