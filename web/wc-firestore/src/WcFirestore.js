@@ -23,7 +23,7 @@ export class WcFirestore extends LitElement {
   async connectedCallback() {
     super.connectedCallback();
     const col = collection(this.db, 'collection');
-    const q = query(col, orderBy("createTime", "desc"), limit(5));
+    const q = query(col, orderBy("timestamp", "desc"), limit(5));
     const querySnapshot = await getDocs(q);
     this.docs = querySnapshot.docs.filter((d) => d.data().video);
     this.oembeds = await Promise.all(this.docs.map(async (d) => {
@@ -36,7 +36,7 @@ export class WcFirestore extends LitElement {
   async readMore() {
     const lastDoc = this.docs[this.docs.length - 1];
     const col = collection(this.db, 'collection');
-    const q = query(col, orderBy("createTime", "desc"), limit(5), startAfter(lastDoc));
+    const q = query(col, orderBy("timestamp", "desc"), limit(5), startAfter(lastDoc));
     const querySnapshot = await getDocs(q);
     const incDocs = querySnapshot.docs.filter((d) => d.data().video);
     const incOembeds = await Promise.all(incDocs.map(async (d) => {

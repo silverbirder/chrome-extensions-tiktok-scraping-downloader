@@ -17,6 +17,8 @@ express()
   .use(express.json())
   .use(express.urlencoded({ extended: false }))
   .post('/', async (req, res, next) => {
+    const data = req.body.data;
+    data['timestamp'] = Date.now();
     await uploadDoc(
       process.env.GOOGLE_CLOUD_FIRESTORE_COLLECTION,
       req.body.data,
