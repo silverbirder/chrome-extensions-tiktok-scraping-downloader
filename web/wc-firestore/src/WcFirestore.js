@@ -56,10 +56,10 @@ export class WcFirestore extends LitElement {
   }
   render() {
     // return html`
-    //   <iframe srcdoc='${this.oembeds.map((d) => d.html).join('')}' loading="lazy" width="605px" height="${739 * this.oembeds.length}px">
+    //   <iframe srcdoc='${this.oembeds.map((d) => d.html).join('')}' loading="lazy" width="100%" height="${739 * this.oembeds.length}px">
     //   </iframe><button @click=${this.readMore}>Read more...</button>`;
     return html`${this.oembeds.map((d) => {
-      return html `<iframe srcdoc='${d.html}' loading="lazy" width="605px" height="739px"></iframe>`;
+      return html `<iframe srcdoc='${d.html}' loading="lazy" width="100%" height="739px"></iframe>`;
     })}<button @click=${this.readMore}>Read more...</button>`;
   }
 }
