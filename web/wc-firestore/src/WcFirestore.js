@@ -1,42 +1,65 @@
 import { LitElement, html } from 'lit';
 import { initializeApp } from "firebase/app"
-import { getFirestore, collection, getDocs, query, orderBy, limit } from "firebase/firestore"
+import { getFirestore, collection, getDocs, query, orderBy, limit, startAfter } from "firebase/firestore"
+import { map } from '@firebase/util';
 
 export class WcFirestore extends LitElement {
   static get properties() {
     return {
-      data: { type: Array },
+      docs: { type: Array },
+      oembeds: { type: Array },
     };
   }
   constructor() {
     super();
-    this.data = [];
-  }
-
-  async connectedCallback() {
-    super.connectedCallback();
     const firebaseApp = initializeApp({
       apiKey: process.env.FIREBASE_API_KEY,
       projectId: process.env.FIREBASE_PROJECT_ID,
     });
-    const db = getFirestore(firebaseApp);
-    const col = collection(db, 'collection');
-    const q = query(col, orderBy('createTime', 'desc'), limit(5));
+    this.db = getFirestore(firebaseApp);
+    this.docs = [];
+    this.oembeds = [];
+  }
+
+  async connectedCallback() {
+    super.connectedCallback();
+    const col = collection(this.db, 'collection');
+    const q = query(col, orderBy('createTime', 'desc'), limit(1));
     const querySnapshot = await getDocs(q);
-    const docs = querySnapshot.docs.filter((d) => d.data().video);
-    const data = await Promise.all(docs.map(async (d) => {
+    this.docs = querySnapshot.docs.filter((d) => d.data().video);
+    this.oembeds = await Promise.all(this.docs.map(async (d) => {
       const data = d.data();
       const tiktokUrl = `https://www.tiktok.com/@${data.author}/video/${data.video.id}`;
       const tiktokOembedUrl = `https://www.tiktok.com/oembed?url=${tiktokUrl}`;
       return (await fetch(tiktokOembedUrl)).json();
     }));
-    this.data = data;
   }
-
+  async readMore() {
+    const lastDoc = this.docs[this.docs.length - 1];
+    const col = collection(this.db, 'collection');
+    const q = query(col, orderBy('createTime', 'desc'), limit(1), startAfter(lastDoc));
+    const querySnapshot = await getDocs(q);
+    const incDocs = querySnapshot.docs.filter((d) => d.data().video);
+    const incOembeds = await Promise.all(incDocs.map(async (d) => {
+      const data = d.data();
+      const tiktokUrl = `https://www.tiktok.com/@${data.author}/video/${data.video.id}`;
+      const tiktokOembedUrl = `https://www.tiktok.com/oembed?url=${tiktokUrl}`;
+      return (await fetch(tiktokOembedUrl)).json();
+    }));
+    incDocs.map((d) => {
+      this.docs.push(d);
+    });
+    incOembeds.map((d) => {
+      this.oembeds.push(d);
+    });
+    this.requestUpdate();
+  }
   render() {
-    return html`<iframe srcdoc='${this.data.map((d) => d.html).join('')}' loading="lazy" width="605px" height="${739 * this.data.length}px"></iframe>`;
-    // return html`${this.data.map((d) => {
-    //   return html `<iframe srcdoc='${d.html}' loading="lazy" width="605px" height="739px"></iframe>`;
-    // })}`;
+    // return html`
+    //   <iframe srcdoc='${this.oembeds.map((d) => d.html).join('')}' loading="lazy" width="605px" height="${739 * this.oembeds.length}px">
+    //   </iframe><button @click=${this.readMore}>Read more...</button>`;
+    return html`${this.oembeds.map((d) => {
+      return html `<iframe srcdoc='${d.html}' loading="lazy" width="605px" height="739px"></iframe>`;
+    })}<button @click=${this.readMore}>Read more...</button>`;
   }
 }
