@@ -8,8 +8,8 @@ const port = process.env.PORT || 3000;
 
 const uploadDoc = async (collectionName, docObj) => {
   const firestore = new Firestore();
-  const collectionRef = firestore.collection(collectionName);
-  await collectionRef.add(docObj);
+  const documentRef = firestore.collection(collectionName).doc(docObj.id);
+  await documentRef.set(docObj);
 };
 
 express()

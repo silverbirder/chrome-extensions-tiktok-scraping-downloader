@@ -1,8 +1,16 @@
+setTimeout(() => {
+    location.reload();
+}, 1 * 60 * 1000);
+
 chrome.runtime.onMessage.addListener(
-    async (request, sender, sendResponse) => {
-        const json = await (await fetch(request.url)).json();
-        process(json.itemList);
-        sendResponse();
+    (request, sender, sendResponse) => {
+        fetch(request.url).then((r) => {
+            r.json().then((json) => {
+                console.log('process from background');
+                process(json.itemList);
+                sendResponse();
+            });
+        });
         return true;
     }
 );
@@ -10,6 +18,7 @@ chrome.runtime.onMessage.addListener(
 window.addEventListener('message', (event) => {
     if (event.data.type && event.data.type == "FROM_PAGE") {
         const details = event.data.details;
+        console.log('process from web_accessible_resources');
         process(Object.values(details));
     }
 });

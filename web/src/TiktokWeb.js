@@ -2,7 +2,7 @@ import { LitElement, html } from 'lit';
 import { initializeApp } from "firebase/app"
 import { getFirestore, collection, getDocs, query, orderBy, limit, startAfter } from "firebase/firestore"
 
-export class WcFirestore extends LitElement {
+export class TiktokWeb extends LitElement {
   static get properties() {
     return {
       docs: { type: Array },

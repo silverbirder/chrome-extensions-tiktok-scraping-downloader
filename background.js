@@ -5,6 +5,7 @@ chrome.runtime.onInstalled.addListener(() => {
             if (!/item_list/.test(details.url)) return;
             if (_cacheUrl === details.url) return;
             const tab = await getCurrentTab();
+            console.log(`post ${details.url}`);
             chrome.tabs.sendMessage(tab.id, details, (response) => { });
             _cacheUrl = details.url;
         },

@@ -1,8 +1,8 @@
 {
-  "name": "wc-firestore",
-  "description": "Webcomponent wc-firestore following open-wc recommendations",
+  "name": "tiktok-web",
+  "description": "Webcomponent tiktok-web following open-wc recommendations",
   "license": "MIT",
-  "author": "wc-firestore",
+  "author": "tiktok-web",
   "version": "0.0.0",
   "scripts": {
     "build": "rimraf dist && rollup -c rollup.config.js",
