@@ -11,7 +11,7 @@ I'm Tik Tok Lover. TikTok does not provide an official API. Therefore, there are
 * https://github.com/davidteather/TikTok-Api
 * https://github.com/drawrowfly/tiktok-scraper
 
-These APIs are great OSSs that meet my needs. However, if the changes on the TikTok side (especially authentication) are met, these OSSs will not work well. Thanks to the efforts of the OSS developers, the unofficial API works fine, but it's a cat-and-mouse game.
+These APIs are great OSSs that meet my needs. However, if the changes on the TikTok side (especially authentication) occurs, these OSSs will not work well. Thanks to the efforts of the OSS developers, the unofficial API works fine, but it's a cat-and-mouse game.
 
 So, for stability, I came up with a way to scrape [TikTok web page](https://www.tiktok.com) from Chrome extensions. That is this repository.
 
