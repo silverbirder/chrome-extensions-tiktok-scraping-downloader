@@ -32,9 +32,9 @@ To get these TikTok Item from the Chrome extension, I have the following configu
 * First
   * web_accessible_resources.js accesses the window object and gets a TikTok Item.
 * Second and subsequent
-  * Monitor requests to the TikTok API and get the request URL. Get TikTok Item using URL.
+  * background.js monitor requests to the TikTok API and get the request URL. Get TikTok Item using URL.
 
-The obtained TikTok Item will be POST to the URL you specify. The data is set in a variable called `data`.
+The obtained TikTok Item will be POST from content-script.js to the URL you specify. The data is set in a variable called `data`.
 
 ## Usage
 
