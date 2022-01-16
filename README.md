@@ -1,4 +1,4 @@
-# chrome-extension-tiktok-scraping-downloader
+# chrome-extensions-tiktok-scraping-downloader
 
 ## What's this
 
