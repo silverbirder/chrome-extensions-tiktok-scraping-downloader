@@ -1,8 +1,13 @@
 {
-  "name": "chrome-extension-tiktok-downloader",
-  "description": "Download tiktok",
-  "version": "1.0",
+  "name": "chrome-extensions-tiktok-scraping-downloader",
+  "description": "Scrape Tiktok web page and post it.",
+  "version": "0.0.1",
   "manifest_version": 3,
+  "icons": {
+    "16": "./icons/favicon-16x16.png",
+    "48": "./icons/favicon-16x16.png",
+    "128": "./icons/favicon-16x16.png"
+  },
   "permissions": [
     "webRequest",
     "tabs",
