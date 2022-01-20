@@ -1,8 +1,8 @@
-# chrome-extension-tiktok-scraping-downloader
+# chrome-extensions-tiktok-scraping-downloader
 
 ## What's this
 
-This is a Chrome extension that scrapes and posts Tiktok web pages.
+This is a Chrome extensions that scrapes and posts Tiktok web pages.
 
 ## Motivation
 
@@ -25,7 +25,7 @@ On the TikTok web page, there are two ways to get a TikTok Item.
 * Second and subsequent
     * Due to lazy loading, request to TikTok API to get TikTok Item and render.
 
-To get these TikTok Item from the Chrome extension, I have the following configuration.
+To get these TikTok Item from the Chrome extensions, I have the following configuration.
 
 ![overview](./overview.png)
 
@@ -38,7 +38,7 @@ The obtained TikTok Item will be POST from content-script.js to the URL you spec
 
 ## Usage
 
-1. Load this repository as a Chrome extension.
+1. Load this repository as a Chrome extensions.
     1. see https://developer.chrome.com/docs/extensions/mv3/getstarted/
 1. Go to the Option page and set your server URL.
     1. Otherwise, it will be `http://localhost:3000`.
