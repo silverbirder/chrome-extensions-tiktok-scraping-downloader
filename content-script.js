@@ -8,6 +8,7 @@ const handleOnMessage = (request, sender, sendResponse) => {
     });
     return true;
 };
+
 const handleWindowMessage = (event) => {
     if (event.data.type && event.data.type == "FROM_PAGE") {
         const details = event.data.details;
@@ -15,14 +16,22 @@ const handleWindowMessage = (event) => {
         process(Object.values(details));
     }
 };
+
 const injectScript = (filePath, tag) => {
     var node = document.getElementsByTagName(tag)[0];
     var script = document.createElement('script');
     script.setAttribute('type', 'text/javascript');
     script.setAttribute('src', filePath);
+    script.setAttribute('id', 'inject');
     node.appendChild(script);
 }
-const _sleep = (ms) => new Promise((resolve) => setTimeout(resolve, ms));
+
+const removeInjectScript = () => {
+    const scriptElement = document.querySelector('#inject');
+    if (!scriptElement) return;
+    scriptElement.remove();
+};
+
 const process = (items) => {
     Promise.all(items.map(async (i) => {
         const urlStorage = await chrome.storage.sync.get('url');
@@ -36,16 +45,27 @@ const process = (items) => {
             body: JSON.stringify({ 'data': i })
         })
     }))
-}
-const scrollToBottom = async (distance = 100, delay = 400) => {
-    while (document.scrollingElement.scrollTop + window.innerHeight < document.scrollingElement.scrollHeight) {
-        document.scrollingElement.scrollBy(0, distance)
-        await _sleep(delay);
-    }
+};
+
+const scrollToBottom = async (event) => {
+    document.scrollingElement.scrollBy(0, document.scrollingElement.scrollHeight)
+};
+
+const start = () => {
+    chrome.runtime.onMessage.addListener(handleOnMessage);
+    window.addEventListener('message', handleWindowMessage);
+    window.addEventListener('scroll', scrollToBottom);
+    injectScript(chrome.runtime.getURL('web_accessible_resources.js'), 'body');
+    console.log('hey');
 }
 
-chrome.runtime.onMessage.addListener(handleOnMessage);
-window.addEventListener('message', handleWindowMessage);
+const end = () => {
+    chrome.runtime.onMessage.removeListener(handleOnMessage);
+    window.removeEventListener('message', handleWindowMessage);
+    window.removeEventListener('scroll', scrollToBottom);
+    removeInjectScript();
+};
 
-injectScript(chrome.runtime.getURL('web_accessible_resources.js'), 'body');
-scrollToBottom();
+setInterval(() => {
+    window.dispatchEvent(new Event('scroll'));
+}, 1000);
