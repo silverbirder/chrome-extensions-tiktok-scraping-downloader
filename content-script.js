@@ -1,7 +1,3 @@
-setTimeout(() => {
-    location.reload();
-}, 1 * 60 * 1000);
-
 chrome.runtime.onMessage.addListener(
     (request, sender, sendResponse) => {
         fetch(request.url).then((r) => {
