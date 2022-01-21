@@ -1,21 +1,17 @@
 let _cacheUrl = '';
-chrome.runtime.onInstalled.addListener(() => {
-    chrome.webRequest.onCompleted.addListener(
-        async (details) => {
-            if (!/item_list/.test(details.url)) return;
-            if (_cacheUrl === details.url) return;
-            const tab = await getCurrentTab();
-            console.log(`post ${details.url}`);
-            chrome.tabs.sendMessage(tab.id, details, (response) => { });
-            _cacheUrl = details.url;
-        },
-        {
-            urls: [
-                "https://www.tiktok.com/*"
-            ]
-        }
-    );
-});
+
+const handleWebRequest = async (details) => {
+    if (!/item_list/.test(details.url)) return;
+    if (_cacheUrl === details.url) return;
+    const tab = await getCurrentTab();
+    console.log(`post ${details.url}`);
+    chrome.tabs.sendMessage(tab.id, details, (response) => { });
+    _cacheUrl = details.url;
+};
+
+chrome.runtime.onInstalled.addListener(() =>
+    chrome.webRequest.onCompleted.addListener(handleWebRequest, { urls: ["https://www.tiktok.com/*"] })
+);
 
 const getCurrentTab = async () => {
     const queryOptions = { url: ["https://www.tiktok.com/*"] };

@@ -1,5 +1,5 @@
 {
-  "name": "chrome-extensions-tiktok-scraping-downloader",
+  "name": "Tiktok-Scraper",
   "description": "Scrape Tiktok web page and post it.",
   "version": "0.0.1",
   "manifest_version": 3,
@@ -11,7 +11,8 @@
   "permissions": [
     "webRequest",
     "tabs",
-    "storage"
+    "storage",
+    "scripting"
   ],
   "host_permissions": [
     "https://*/*"
@@ -39,5 +40,13 @@
       ]
     }
   ],
-  "options_page": "options.html"
+  "options_page": "options.html",
+  "action": {
+    "default_popup": "popup.html",
+    "default_icon": {
+      "16": "./icons/favicon-16x16.png",
+      "48": "./icons/favicon-16x16.png",
+      "128": "./icons/favicon-16x16.png"
+    }
+  }
 }
