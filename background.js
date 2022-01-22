@@ -9,8 +9,16 @@ const handleWebRequest = async (details) => {
     _cacheUrl = details.url;
 };
 
-chrome.runtime.onInstalled.addListener(() => {
-    chrome.webRequest.onCompleted.addListener(handleWebRequest, { urls: ["https://www.tiktok.com/*"] })
+const initStorage = async () => {
+    const storageValue = await chrome.storage.sync.get(['ts']);
+    if (storageValue.ts !== undefined) return;
+    const value = { url: "http://localhost:3000", interval: 1000, started: false };
+    await chrome.storage.sync.set({ ts: value });
+};
+
+chrome.runtime.onInstalled.addListener(async () => {
+    chrome.webRequest.onCompleted.addListener(handleWebRequest, { urls: ["https://www.tiktok.com/*", "https://t.tiktok.com/*"] })
+    await initStorage();
 });
 
 const getCurrentTab = async () => {

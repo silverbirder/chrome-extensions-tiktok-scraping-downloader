@@ -1,10 +1,16 @@
 <!DOCTYPE html>
 <html>
   <body>
+  <h1>Settings</h1>
   <div>
-    <label for="url">Enter the POST URL</label>
-    <input type="text" name="url" id="url" placeholder="https://localhost:3000">
+    <label for="url">Enter the post url</label>
+    <input type="text" name="url" id="url" value="">
   </div>
-  <button id="save">Store</button>
+  <div>
+    <label for="interval">Enter the scroll interval (millisecond)</label>
+    <input type="text" name="interval" id="interval" value="">
+  </div>
+  <button id="save">Save</button>
+  <div id="message"></div>
   <script src="options.js"></script>
 </html>
