@@ -56,7 +56,6 @@ const start = () => {
     window.addEventListener('message', handleWindowMessage);
     window.addEventListener('scroll', scrollToBottom);
     injectScript(chrome.runtime.getURL('web_accessible_resources.js'), 'body');
-    console.log('hey');
 }
 
 const end = () => {
@@ -69,3 +68,14 @@ const end = () => {
 setInterval(() => {
     window.dispatchEvent(new Event('scroll'));
 }, 1000);
+
+const handleInitOnMessage = (request, sender, sendResponse) => {
+    console.log(request);
+    if (request.message === 'start') {
+        start();
+    } else {
+        end();
+    }
+};
+
+chrome.runtime.onMessage.addListener(handleInitOnMessage);

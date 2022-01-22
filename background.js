@@ -9,9 +9,9 @@ const handleWebRequest = async (details) => {
     _cacheUrl = details.url;
 };
 
-chrome.runtime.onInstalled.addListener(() =>
+chrome.runtime.onInstalled.addListener(() => {
     chrome.webRequest.onCompleted.addListener(handleWebRequest, { urls: ["https://www.tiktok.com/*"] })
-);
+});
 
 const getCurrentTab = async () => {
     const queryOptions = { url: ["https://www.tiktok.com/*"] };
