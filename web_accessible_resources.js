@@ -1,1 +1,1 @@
-window.postMessage({ type: "FROM_PAGE", details: window["SIGI_STATE"].ItemModule })
+window.postMessage({ from: 'web_accessible_resources.js', data: window["SIGI_STATE"].ItemModule })

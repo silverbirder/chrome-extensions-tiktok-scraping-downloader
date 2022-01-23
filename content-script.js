@@ -1,31 +1,25 @@
-const handleOnMessage = async (request, sender, sendResponse) => {
+const handleFromBackground = async (request, sender, sendResponse) => {
     if (request.message === 'start') {
         start();
         sendResponse();
     } else if (request.message === 'end') {
         end();
         sendResponse();
-    } else if (request.url) {
-        const storage = await chrome.storage.sync.get(['ts']);
-        if (storage.ts.started === false) return;
-        fetch(request.url).then((r) => {
-            r.json().then((json) => {
-                console.log('process from background');
-                process(json.itemList);
-                sendResponse();
-            });
-        });
+    } else if (request.data) {
+        console.log(`process from ${request.from}`);
+        process(request.data);
+        sendResponse();
     }
     return true;
 };
 
-const handleWindowMessage = async (event) => {
-    if (event.data.type && event.data.type == "FROM_PAGE") {
+const handleFromWeb = async (event) => {
+    if (event.data.from) {
         const storage = await chrome.storage.sync.get(['ts']);
         if (storage.ts.started === false) return;
-        const details = event.data.details;
-        console.log('process from web_accessible_resources');
-        process(Object.values(details));
+        const data = event.data.data;
+        console.log(`process from ${event.data.from}`);
+        process(Object.values(data));
     }
 };
 
@@ -44,10 +38,13 @@ const removeInjectScript = () => {
     scriptElement.remove();
 };
 
-const process = (items) => {
+const process = async (items) => {
+    const storage = await chrome.storage.sync.get(['ts']);
+    if (storage.ts.started === false) return;
+    console.log('Will post data is below.');
+    console.log(items);
+    const url = storage.ts.url;
     Promise.all(items.map(async (i) => {
-        const storage = await chrome.storage.sync.get('ts');
-        const url = storage.ts.url;
         return fetch(url, {
             method: "POST",
             headers: {
@@ -63,18 +60,18 @@ const scrollToBottom = async (event) => {
 };
 
 const start = () => {
-    window.addEventListener('message', handleWindowMessage);
+    window.addEventListener('message', handleFromWeb);
     window.addEventListener('scroll', scrollToBottom);
     injectScript(chrome.runtime.getURL('web_accessible_resources.js'), 'body');
 }
 
 const end = () => {
-    window.removeEventListener('message', handleWindowMessage);
+    window.removeEventListener('message', handleFromWeb);
     window.removeEventListener('scroll', scrollToBottom);
     removeInjectScript();
 };
 
-chrome.runtime.onMessage.addListener(handleOnMessage);
+chrome.runtime.onMessage.addListener(handleFromBackground);
 
 (async () => {
     const storage = await chrome.storage.sync.get(['ts']);

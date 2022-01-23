@@ -13,9 +13,6 @@
     "tabs",
     "storage"
   ],
-  "host_permissions": [
-    "https://*/*"
-  ],
   "content_scripts": [
     {
       "matches": [
@@ -46,5 +43,6 @@
       "48": "./icons/favicon-16x16.png",
       "128": "./icons/favicon-16x16.png"
     }
-  }
+  },
+  "devtools_page": "devtools.html"
 }
