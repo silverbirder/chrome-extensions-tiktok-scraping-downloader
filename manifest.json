@@ -1,6 +1,6 @@
 {
   "name": "Tiktok-Scraper",
-  "description": "Scrape Tiktok web page and post it.",
+  "description": "This extension scrapes a Tiktok web page and either downloads a file or sends a POST.",
   "version": "0.0.1",
   "manifest_version": 3,
   "icons": {
