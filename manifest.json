@@ -38,6 +38,7 @@
   ],
   "options_page": "options.html",
   "action": {
+    "default_popup": "popup.html",
     "default_icon": {
       "16": "./icons/favicon-16x16.png",
       "48": "./icons/favicon-16x16.png",

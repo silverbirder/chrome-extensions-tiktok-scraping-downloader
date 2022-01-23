@@ -1,3 +1,5 @@
+let _started = false;
+
 const handleFromBackground = async (request, sender, sendResponse) => {
     if (request.message === 'start') {
         start();
@@ -6,6 +8,7 @@ const handleFromBackground = async (request, sender, sendResponse) => {
         end();
         sendResponse();
     } else if (request.data) {
+        if (!_started) return true;
         console.log(`process from ${request.from}`);
         process(request.data);
         sendResponse();
@@ -15,8 +18,6 @@ const handleFromBackground = async (request, sender, sendResponse) => {
 
 const handleFromWeb = async (event) => {
     if (event.data.from) {
-        const storage = await chrome.storage.sync.get(['ts']);
-        if (storage.ts.started === false) return;
         const data = event.data.data;
         console.log(`process from ${event.data.from}`);
         process(Object.values(data));
@@ -40,7 +41,6 @@ const removeInjectScript = () => {
 
 const process = async (items) => {
     const storage = await chrome.storage.sync.get(['ts']);
-    if (storage.ts.started === false) return;
     console.log('Will post data is below.');
     console.log(items);
     const url = storage.ts.url;
@@ -60,15 +60,19 @@ const scrollToBottom = async (event) => {
 };
 
 const start = () => {
+    _started = true;
     window.addEventListener('message', handleFromWeb);
     window.addEventListener('scroll', scrollToBottom);
     injectScript(chrome.runtime.getURL('web_accessible_resources.js'), 'body');
+    console.log('start tiktok scraping!!!');
 }
 
 const end = () => {
+    _started = false;
     window.removeEventListener('message', handleFromWeb);
     window.removeEventListener('scroll', scrollToBottom);
     removeInjectScript();
+    console.log('end tiktok scraping');
 };
 
 chrome.runtime.onMessage.addListener(handleFromBackground);
