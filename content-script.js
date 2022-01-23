@@ -51,7 +51,9 @@ const process = async (items) => {
                 'Content-Type': 'application/json'
             },
             body: JSON.stringify({ 'data': i })
-        })
+        }).catch((error) => {
+            chrome.runtime.sendMessage({ data: i }, (response) => { });
+        });
     }))
 };
 

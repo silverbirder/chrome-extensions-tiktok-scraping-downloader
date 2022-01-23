@@ -12,6 +12,20 @@ const getCurrentTab = async () => {
     return activeTabs.length > 0 ? activeTabs[0] : tabs[0];
 }
 
+const handleFromContentScript = async (request, sender, sendResponse) => {
+    const b = btoa(encodeURIComponent(JSON.stringify(request.data)));
+    const manifest = chrome.runtime.getManifest();
+    chrome.downloads.download({
+        filename: `${manifest.name}/${request.data.id}.json`,
+        url: `data:application/json;base64,${b}`
+    }, (downloadId) => {
+        console.log(`downloadId: ${downloadId}`);
+        sendResponse();
+    })
+    return true;
+};
+
 chrome.runtime.onInstalled.addListener(async () => {
     await initStorage();
+    chrome.runtime.onMessage.addListener(handleFromContentScript);
 });
