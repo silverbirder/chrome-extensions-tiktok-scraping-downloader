@@ -9,7 +9,6 @@
     "128": "./icons/favicon-16x16.png"
   },
   "permissions": [
-    "webRequest",
     "tabs",
     "storage",
     "downloads"

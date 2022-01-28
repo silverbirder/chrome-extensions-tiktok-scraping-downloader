@@ -45,3 +45,21 @@ The obtained TikTok Item will be POST from content-script.js to the URL you spec
         1. In that case, let's start the local [server](./server).
 1. Open the [TikTok web page](https://www.tiktok.com) in your Chrome browser.
     1. Tiktok Item will be POSTed to your server!
+
+
+## Notes
+### Zip
+
+```
+$ zip -r tiktok-scraper-chrome-extension.zip \
+  ./chrome-extension-tiktok-downloader/ \
+  -x './chrome-extension-tiktok-downloader/server/*' \
+  -x './chrome-extension-tiktok-downloader/server_local/*' \
+  -x './chrome-extension-tiktok-downloader/web/*' \
+  -x './chrome-extension-tiktok-downloader/.git/*' \
+  -x './chrome-extension-tiktok-downloader/web/*' \
+  -x './chrome-extension-tiktok-downloader/*.md' \
+  -x './chrome-extension-tiktok-downloader/.DS_Store' \
+  -x './chrome-extension-tiktok-downloader/overview.*' \
+  -x './chrome-extension-tiktok-downloader/LICENSE'
+```
