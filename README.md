@@ -48,6 +48,10 @@ The obtained TikTok Item will be POST from content-script.js to the URL you spec
 
 
 ## Notes
+
+Make sure you run it with chrome incognito!
+This is because it will not work under the influence of other chrome exteions.
+
 ### Zip
 
 ```
